@@ -1,0 +1,10 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+aws:
+  accessKey: ${ACCESS_KEY}
+  secretAccessKey: ${SECRET_ACCESS_KEY}
+  region: ${REGION}
+  dynamoDb:
+    todoTableName: ${DYNAMODB_TODO_TABLE_NAME}
