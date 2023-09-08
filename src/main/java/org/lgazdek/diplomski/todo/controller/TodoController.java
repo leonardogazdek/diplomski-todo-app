@@ -3,6 +3,7 @@ package org.lgazdek.diplomski.todo.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.lgazdek.diplomski.todo.dto.TodoRequestDto;
 import org.lgazdek.diplomski.todo.dto.TodoResponseDto;
 import org.lgazdek.diplomski.todo.mapper.TodoRequestMapper;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class TodoController {
     private final DynamoDbClient dynamoDbClient;
     private final TodoResponseMapper todoResponseMapper;
@@ -28,6 +30,7 @@ public class TodoController {
     @Operation(summary = "Gets all todo items")
     @GetMapping("/api/todo")
     public List<TodoResponseDto> getTodos() {
+        log.info("Primljen zahtjev getTodos");
         ScanRequest scanRequest = ScanRequest
             .builder()
             .tableName(todoTableName)
@@ -47,6 +50,7 @@ public class TodoController {
     @Operation(summary = "Create a todo item")
     @PostMapping("/api/todo")
     public TodoResponseDto createTodo(@RequestBody @Valid TodoRequestDto reqDto) {
+        log.info("Primljen zahtjev createTodo");
         Map<String, AttributeValue> insertItem = todoRequestMapper.toModel(reqDto);
         PutItemRequest putItemRequest = PutItemRequest
             .builder()
@@ -61,6 +65,7 @@ public class TodoController {
     @DeleteMapping("/api/todo/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteTodo(@PathVariable String id) {
+        log.info("Primljen zahtjev deleteTodo");
         DeleteItemRequest deleteItemRequest = DeleteItemRequest
             .builder()
             .tableName(todoTableName)
@@ -72,6 +77,7 @@ public class TodoController {
     @Operation(summary = "Update a todo item")
     @PatchMapping("/api/todo/{id}")
     public void updateTodo(@PathVariable String id, @RequestBody @Valid TodoRequestDto reqDto) {
+        log.info("Primljen zahtjev updateTodo");
         Map<String, AttributeValueUpdate> updateItem = todoRequestMapper.toUpdateModel(reqDto);
         UpdateItemRequest updateItemRequest = UpdateItemRequest
             .builder()
